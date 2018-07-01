@@ -1,5 +1,5 @@
-#ifndef LCDKeypadShield_h
-#define LCDKeypadShield_h
+#ifndef _LCDKEYPADSHIELD_h
+#define _LCDKEYPADSHIELD_h
 
 #include "Arduino.h"
 #include <LiquidCrystal.h>
@@ -19,7 +19,7 @@ class LCDKeypadShield
 public:
   LCDKeypadShield();
   Btn read_buttons();
-  void updateDisplay();
+  void update();
   void setup();
 
   LiquidCrystal *lcd = new LiquidCrystal(8, 9, 4, 5, 6, 7);
@@ -28,7 +28,7 @@ public:
   char line1[17];
 
 private:
-  uint16_t  _adc_key_in;
+  uint16_t adc_key_in_;
 };
 
 #endif
