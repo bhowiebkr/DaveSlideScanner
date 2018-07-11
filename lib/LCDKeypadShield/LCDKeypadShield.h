@@ -22,7 +22,7 @@ public:
   void update();
   void setup();
 
-  LiquidCrystal *lcd = new LiquidCrystal(8, 9, 4, 5, 6, 7);
+  LiquidCrystal *lcd = new LiquidCrystal(9, 8, 4, 5, 6, 7);
 
   char line0[17];
   char line1[17];

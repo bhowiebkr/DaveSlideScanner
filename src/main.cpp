@@ -7,6 +7,8 @@ LCDKeypadShield lcdShield;               // LCD Keypad Shield
 static const uint8_t projector_pin = 11; // Output pin used to load the next slide on the projector
 static const uint8_t photo_pin = 12;     // Output pin to take a photo
 static const int slide_load_pin = 2;     // Input pin to know when a slide is loaded
+static const int start_pin = 3;     // Input pin to know when a slide is loaded
+
 
 // Timings
 int trigger_projector_ms = 200; // Time for the relay to be on to trigger the projector
@@ -17,9 +19,10 @@ int total_images = 0;           // Total images taken before being reset
 
 Trigger trigger;
 
-static Btn btn; // Enum state of what button was pushed on the LCD Keypad Shield
 
 static Debounce slideLoadedInput(slide_load_pin, 1, 20); // A Debounce to remove noise in on the input
+static Debounce startBtn(start_pin, 1, 20); // A Debounce to remove noise in on the input
+
 
 enum ScannerStates
 {
@@ -34,45 +37,6 @@ enum ScannerStates
 
 ScannerStates scannerState = STOPPED; // We start the state machine in the STOPPED state
 
-void Menu()
-{
-  btn = lcdShield.read_buttons();
-
-  switch (btn)
-  {
-  case Btn::RIGHT:
-  {
-    sprintf(lcdShield.line0, "%-16s", "RIGHT");
-    //scannerState = LOADING_SLIDE;
-    break;
-  }
-  case Btn::LEFT:
-  {
-    sprintf(lcdShield.line0, "%-16s", "LEFT");
-    break;
-  }
-  case Btn::UP:
-  {
-    sprintf(lcdShield.line0, "%-16s", "UP");
-    break;
-  }
-  case Btn::DOWN:
-  {
-    sprintf(lcdShield.line0, "%-16s", "DOWN");
-    break;
-  }
-  case Btn::SELECT:
-  {
-    sprintf(lcdShield.line0, "%-16s", "SELECT");
-    break;
-  }
-  case Btn::NONE:
-  {
-    sprintf(lcdShield.line0, "%-16s", "NONE");
-    break;
-  }
-  }
-}
 
 void ScannerMachine()
 {
@@ -177,9 +141,5 @@ void setup()
 
 void loop()
 {
-  Menu();
   ScannerMachine();
-
-  //bool temp = slideLoadedInput.read();
-  //Serial.println(temp);
 }
