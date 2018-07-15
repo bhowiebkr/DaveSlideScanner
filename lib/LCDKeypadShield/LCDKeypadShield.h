@@ -24,8 +24,8 @@ public:
 
   LiquidCrystal *lcd = new LiquidCrystal(9, 8, 4, 5, 6, 7);
 
-  char line0[17];
-  char line1[17];
+  char line0[16];
+  char line1[16];
 
 private:
   uint16_t adc_key_in_;
