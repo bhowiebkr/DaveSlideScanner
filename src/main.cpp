@@ -22,7 +22,7 @@ Trigger trigger;
 int photo_num = 1;
 
 
-static Debounce slideLoadedInput(slide_load_pin, 0, 20); // A Debounce to remove noise in on the input
+static Debounce slideLoadedInput(slide_load_pin, 1, 20); // A Debounce to remove noise in on the input
 static Debounce startBtn(start_pin, 0, 30); // A Debounce to remove noise in on the input
 
 
@@ -76,6 +76,7 @@ void ScannerMachine()
       digitalWrite(projector_pin, LOW);
       scannerState = WAITING_FOR_SLIDE;
       Serial.println("State: WAITING_FOR_SLIDE");
+      delay(100);
     }
 
     break;
