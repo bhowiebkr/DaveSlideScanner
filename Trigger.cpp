@@ -1,5 +1,4 @@
 #include "Trigger.h"
-#include "Arduino.h"
 
 Trigger::Trigger()
 {
@@ -7,12 +6,11 @@ Trigger::Trigger()
     stop_ = true;
 }
 
-bool Trigger::wasTriggered()
+bool Trigger::was_triggered()
 {
     if (triggered_)
     {
-        triggered_ = false;
-        stop_ = true;
+        reset();
         return true;
     }
     return false;
@@ -29,6 +27,13 @@ void Trigger::update()
     {
         triggered_ = true;
     }
+}
+
+void Trigger::reset()
+{
+    triggered_ = false;
+    stop_ = true;
+    timeout_ = 0; // or any value that indicates the timeout is not set
 }
 
 void Trigger::trigger(uint16_t delay)

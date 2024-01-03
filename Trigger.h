@@ -9,7 +9,8 @@ public:
   Trigger();
   void trigger(uint16_t delay);
   void update();
-  bool wasTriggered();
+  void reset();
+  bool was_triggered();
 
 private:
   unsigned long timeout_;

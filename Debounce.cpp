@@ -7,6 +7,7 @@ Debounce::Debounce(uint8_t pin, uint8_t polarity, uint8_t delayTime)
     _dbDelay = delayTime;
     _polarity = polarity;
     pinMode(_pin, INPUT_PULLUP);
+    _dbDelayTime = millis(); // Initialize debounce time
 }
 Debounce::~Debounce()
 {
@@ -21,7 +22,7 @@ bool Debounce::read()
     if (reading != _lastState)
     {
         _lastState = reading;
-        _dbDelayTime = millis();
+        _dbDelayTime = millis(); // Update debounce time
     }
 
     if (millis() - _dbDelayTime > _dbDelay)
