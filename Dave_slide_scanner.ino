@@ -28,7 +28,7 @@ int wait_photo_ms = 1000;      // Time after the camera took the photo before lo
 Trigger trigger;
 
 
-static Debounce slideLoadedInput(slide_load_pin, 0, 20);  // A Debounce to remove noise in on the input
+static Debounce slideLoadedInput(slide_load_pin, 0, 2);  // A Debounce to remove noise in on the input
 
 
 enum ScannerStates {
@@ -44,12 +44,16 @@ enum ScannerStates {
 
 ScannerStates scannerState = STOPPED;  // We start the state machine in the STOPPED state
 
+void printToLCD(const char* text, int line) {
+  char buf[17];                                  // One extra space for the null terminator
+  snprintf(buf, sizeof(buf), "%-16.16s", text);  // Ensure 16 characters are printed
+  lcd.setCursor(0, line);
+  lcd.print(buf);
+}
 
 void ScannerMachine() {
 
-  lcd.setCursor(0, 1);
-  lcd.print(slideLoadedInput.read());
-  lcd.setCursor(0, 0);
+
 
   // Update the machine's parts
   trigger.update();
@@ -66,6 +70,10 @@ void ScannerMachine() {
     scannerState = STEP;
   }
 
+  lcd.setCursor(0, 1);
+  lcd.print(slideLoadedInput.read());
+  lcd.setCursor(0, 0);
+
 
   switch (scannerState) {
     // Step State to the next slide but don't take a photo (manual mode)
@@ -81,7 +89,7 @@ void ScannerMachine() {
     // When the button starts, we trigger the projector to load a slide
     case STOPPED:
       {
-        lcd.print("Status: STOPPED");
+        printToLCD("Status: STOPPED", 0);
 
         if (btn == btnStart) {
           delay(400);
@@ -96,7 +104,8 @@ void ScannerMachine() {
     // When the
     case LOADING_SLIDE:
       {
-        lcd.print("Status: LOADING");
+
+        printToLCD("Status: LOADING", 0);
 
         if (trigger.was_triggered()) {
           digitalWrite(projector_pin, LOW);
@@ -109,9 +118,9 @@ void ScannerMachine() {
     // when the slide has been loaded, take the photo
     case WAITING_FOR_SLIDE:
       {
-        lcd.print("Status: WAITING");
+        printToLCD("Status: WAITING", 0);
 
-        if (slideLoadedInput.read() == 1) {
+        if (slideLoadedInput.read()) {
           scannerState = SLIDE_LOADED;
           trigger.trigger(slide_settle_ms);
         }
@@ -119,7 +128,8 @@ void ScannerMachine() {
       }
     case SLIDE_LOADED:
       {
-        lcd.print("Status: LOADED");
+
+        printToLCD("Status: LOADED", 0);
 
         if (trigger.was_triggered()) {
           scannerState = TAKING_PHOTO;
@@ -130,7 +140,8 @@ void ScannerMachine() {
       }
     case TAKING_PHOTO:
       {
-        lcd.print("Status: SHOOT");
+        printToLCD("Status: SHOOT", 0);
+
 
         if (trigger.was_triggered()) {
           digitalWrite(photo_pin, LOW);
@@ -141,7 +152,7 @@ void ScannerMachine() {
       }
     case PHOTO_TAKEN:
       {
-        lcd.print("Status: TAKEN");
+        printToLCD("Status: TAKEN", 0);
 
         if (trigger.was_triggered()) {
           trigger.trigger(trigger_projector_ms);
