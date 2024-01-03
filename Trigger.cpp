@@ -38,6 +38,7 @@ void Trigger::reset()
 
 void Trigger::trigger(uint16_t delay)
 {
+    reset();
     timeout_ = millis() + delay;
     triggered_ = false;
     stop_ = false;
