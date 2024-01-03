@@ -1,5 +1,5 @@
 #include "Arduino.h"
-#include <Debounce.h>
+#include "Debounce.h"
 
 Debounce::Debounce(uint8_t pin, uint8_t polarity, uint8_t delayTime)
 {
